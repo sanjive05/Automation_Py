@@ -32,14 +32,17 @@ import pandas as pd
 import pywhatkit as kit
 import time
 
-# Load Excel file, ensure PHONE NUMBER is read as string to avoid float issues
 df = pd.read_excel(
     "D:\\Automation_Py\\data\\men_data1.xlsx",
     header=1,
-    dtype={'PHONE NUMBER': str}
+    dtype={
+        'PHONE NUMBER': str,
+        'RENT': 'Int64',
+        'FOOD': 'Int64',
+        'ELECTRICITY': 'Int64',
+        'PENDINGS': 'Int64'
+    }
 )
-
-# Check column names for reference
 print("Detected columns:", df.columns.tolist())
 
 for index, row in df.iterrows():
@@ -104,5 +107,3 @@ for index, row in df.iterrows():
             f.write(f"{phone_number} ({name}) - Error: {e}\n")
 
 print("✅ All messages attempted.")
-
-

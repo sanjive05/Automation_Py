@@ -32,8 +32,13 @@ import pandas as pd
 import pywhatkit as kit
 import time
 
+# 🟢 Specify the sheet to process here
+sheet_to_process = "MAY 25"
+
+# Read the specified sheet
 df = pd.read_excel(
     "D:\\Automation_Py\\data\\men_data1.xlsx",
+    sheet_name=sheet_to_process,
     header=1,
     dtype={
         'PHONE NUMBER': str,
@@ -43,6 +48,8 @@ df = pd.read_excel(
         'PENDINGS': 'Int64'
     }
 )
+
+print(f"📄 Processing sheet: {sheet_to_process}")
 print("Detected columns:", df.columns.tolist())
 
 for index, row in df.iterrows():
@@ -51,27 +58,24 @@ for index, row in df.iterrows():
     if pd.isna(phone_raw):
         continue
 
-    phone_number = str(phone_raw).strip().replace(".0", "")  # Remove float decimals if any
+    phone_number = str(phone_raw).strip().replace(".0", "")
 
-    # Sanitize phone number
     if not phone_number.startswith('+'):
         phone_number = '+91' + phone_number
 
-    if len(phone_number) < 13:  # '+91' + 10 digits = 13
+    if len(phone_number) < 13:
         print(f"Skipping invalid number: {phone_number}")
         continue
 
-    # Extract user info
     name = str(row.get('NAME', '')).strip()
     rent = str(row.get('RENT', '')).strip()
     food = str(row.get('FOOD', '')).strip()
     electricity = str(row.get('ELECTRICITY', '')).strip()
     total = str(row.get('TOTAL', '')).strip()
 
-    # Compose the message
     message = (
         f"Dear {name},\n"
-        f"This is your April month rent details:\n"
+        f"This is your {sheet_to_process} month rent details:\n"
         f"* If paid, please share the screenshot.\n"
         f"* Pay before April 10th.\n"
         f"* Kindly take food on time, otherwise I can't take responsibility.\n"
@@ -91,19 +95,18 @@ for index, row in df.iterrows():
     print(f"Sending to {phone_number}...")
 
     try:
-        # Send message instantly
-
         kit.sendwhatmsg_instantly(
             phone_no=phone_number,
             message=message,
             wait_time=13,
             tab_close=True
         )
-        time.sleep(5)  # Short delay between messages
+        time.sleep(5)
 
     except Exception as e:
         print(f"❌ Failed to send to {phone_number}: {e}")
         with open("failed_numbers.txt", "a") as f:
             f.write(f"{phone_number} ({name}) - Error: {e}\n")
 
-print("✅ All messages attempted.")
+print("✅ All messages attempted for sheet:", sheet_to_process)
+

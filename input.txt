@@ -1,0 +1,6 @@
+sheet_to_process = JUNE 2025
+PATH = "C:\\pg_data\\SUBASH_PG.xlsx"
+payment_upi_id = sachinsubash57@ybl
+payment_phone_number = 7094189502
+payment_date = Pay Before July 7th
+is_food = True

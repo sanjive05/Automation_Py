@@ -4,6 +4,7 @@ import time
 import numpy as np
 
 # 🟢 Load configuration from input.txt
+# this script will show to whome the message is sending...
 variables = {}
 try:
     with open('C:\\pg_data\\input.txt', 'r') as file:
@@ -131,3 +132,4 @@ for index, row in df.iterrows():
             f.write(f"{phone_number} ({name}) - Error: {e}\n")
 
 print(f"✅ All messages attempted for sheet: {sheet_to_process}")
+
